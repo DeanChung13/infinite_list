@@ -15,8 +15,15 @@ class ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(
+          color: item.color,
+          width: 1,
+        ),
+      ),
       child: ListTile(
         leading: AspectRatio(
           aspectRatio: 3,
