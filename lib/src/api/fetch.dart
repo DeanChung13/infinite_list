@@ -1,0 +1,47 @@
+// Copyright 2020 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+import 'dart:math';
+
+import 'colors_ext.dart';
+import 'item.dart';
+import 'page.dart';
+
+const catalogLength = 1000;
+
+/// This function emulates a REST API call. You can imagine replacing its
+/// contents with an actual network call, keeping the signature the same.
+///
+/// It will fetch a page of items from [startingIndex].
+Future<ItemPage> fetchPage(int startingIndex) async {
+  // We're emulating the delay inherent to making a network call.
+  await Future<void>.delayed(const Duration(milliseconds: 500));
+
+  // If the [startingIndex] is beyond the bounds of the catalog, an
+  // empty page will be returned.
+  if (startingIndex > catalogLength) {
+    return ItemPage(
+      items: [],
+      startingIndex: startingIndex,
+      hasNext: false,
+    );
+  }
+
+  // The page of items is generated here.
+  return ItemPage(
+    items: List.generate(
+        min(itemsPerPage, catalogLength - startingIndex),
+        (index) => Item(
+              color: IroshizukuColor
+                  .list[index % IroshizukuColor.list.length].color,
+              // color: Colors.primaries[index % Colors.primaries.length],
+              name: IroshizukuColor
+                  .list[index % IroshizukuColor.list.length].name,
+              index: startingIndex + index,
+            )),
+    startingIndex: startingIndex,
+    // Returns `false` if we've reached the [catalogLength].
+    hasNext: startingIndex + itemsPerPage < catalogLength,
+  );
+}
